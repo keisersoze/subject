@@ -1,13 +1,16 @@
-package com.sales.subject.service.dto;
+package com.sales.service.dto;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
+
+import java.util.UUID;
 
 @Getter
 @Setter
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class StaffMemberDto {
+public class StaffMemberNoIdDto {
 
     private String name;
     private String surname;

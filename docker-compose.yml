@@ -1,0 +1,38 @@
+version: '2'
+services:
+  subject:
+    build: .
+    image: subject
+    depends_on:
+      - subject-db
+    environment:
+      - "SPRING_PROFILES_ACTIVE=local"
+    ports:
+      - "4100:8080"
+    volumes:
+      - subject-logs:/var/app_log
+  subject-db:
+    ports:
+      - "4300:3306"
+    restart: always
+    image: mysql:8.3.0
+    environment:
+      - MYSQL_ROOT_PASSWORD=test
+      - MYSQL_DATABASE=subject
+      - MYSQL_USER=test
+      - MYSQL_PASSWORD=test
+    volumes:
+      - subject-db-files:/var/lib/mysql
+volumes:
+  subject-db-files:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: './subject/db'
+  subject-logs:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: './subject/logs'

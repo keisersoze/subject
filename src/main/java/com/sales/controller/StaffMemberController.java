@@ -1,7 +1,8 @@
-package com.sales.subject.controller;
+package com.sales.controller;
 
-import com.sales.subject.service.StaffMemberService;
-import com.sales.subject.service.dto.StaffMemberDto;
+import com.sales.service.StaffMemberService;
+import com.sales.service.dto.StaffMemberDto;
+import com.sales.service.dto.StaffMemberNoIdDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,13 +30,13 @@ public class StaffMemberController {
     }
 
     @PostMapping
-    public ResponseEntity<StaffMemberDto> createStaffMember(@RequestBody StaffMemberDto staffMemberDto) {
+    public ResponseEntity<StaffMemberDto> createStaffMember(@RequestBody StaffMemberNoIdDto staffMemberDto) {
         StaffMemberDto createdStaffMember = staffMemberService.createStaffMember(staffMemberDto);
         return new ResponseEntity<>(createdStaffMember, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<StaffMemberDto> updateStaffMember(@PathVariable UUID id, @RequestBody StaffMemberDto staffMemberDto) {
+    public ResponseEntity<StaffMemberDto> updateStaffMember(@PathVariable UUID id, @RequestBody StaffMemberNoIdDto staffMemberDto) {
         StaffMemberDto updatedStaffMember = staffMemberService.updateStaffMember(id, staffMemberDto);
         return updatedStaffMember != null ?
                 new ResponseEntity<>(updatedStaffMember, HttpStatus.OK) :

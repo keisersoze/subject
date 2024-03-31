@@ -1,8 +1,9 @@
-package com.sales.subject.service;
+package com.sales.service;
 
-import com.sales.subject.model.StaffMember;
-import com.sales.subject.repository.StaffMemberRepository;
-import com.sales.subject.service.dto.StaffMemberDto;
+import com.sales.model.StaffMember;
+import com.sales.repository.StaffMemberRepository;
+import com.sales.service.dto.StaffMemberDto;
+import com.sales.service.dto.StaffMemberNoIdDto;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,13 +26,13 @@ public class StaffMemberService {
                 .map(this::convertToDto);
     }
 
-    public StaffMemberDto createStaffMember(StaffMemberDto staffMemberDto) {
+    public StaffMemberDto createStaffMember(StaffMemberNoIdDto staffMemberDto) {
         StaffMember staffMember = convertToEntity(staffMemberDto);
         StaffMember createdStaffMember = staffMemberRepository.save(staffMember);
         return convertToDto(createdStaffMember);
     }
 
-    public StaffMemberDto updateStaffMember(UUID id, StaffMemberDto staffMemberDto) {
+    public StaffMemberDto updateStaffMember(UUID id, StaffMemberNoIdDto staffMemberDto) {
         Optional<StaffMember> optionalStaffMember = staffMemberRepository.findById(id);
 
         if (optionalStaffMember.isPresent()) {
@@ -56,6 +57,12 @@ public class StaffMemberService {
     }
 
     private StaffMember convertToEntity(StaffMemberDto staffMemberDto) {
+        StaffMember staffMember = new StaffMember();
+        BeanUtils.copyProperties(staffMemberDto, staffMember);
+        return staffMember;
+    }
+
+    private StaffMember convertToEntity(StaffMemberNoIdDto staffMemberDto) {
         StaffMember staffMember = new StaffMember();
         BeanUtils.copyProperties(staffMemberDto, staffMember);
         return staffMember;

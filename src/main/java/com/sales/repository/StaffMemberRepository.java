@@ -1,6 +1,6 @@
-package com.sales.subject.repository;
+package com.sales.repository;
 
-import com.sales.subject.model.StaffMember;
+import com.sales.model.StaffMember;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
