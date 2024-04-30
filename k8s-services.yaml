@@ -1,0 +1,99 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: subject
+  name: subject
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: subject
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: subject
+    spec:
+      containers:
+        - image: ghcr.io/keisersoze/subject:main
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: local
+          name: subject
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          resources: {}
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: subject
+  name: subject
+spec:
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app: subject
+  type: NodePort
+status:
+  loadBalancer: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: subject-db
+spec:
+  ports:
+    - port: 3306
+  selector:
+    app: subject-db
+  clusterIP: None
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: subject-db
+spec:
+  selector:
+    matchLabels:
+      app: subject-db
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: subject-db
+    spec:
+      containers:
+        - image: mysql:8.3.0
+          name: mysql
+          env:
+            # Use secret in real usage
+            - name: MYSQL_ROOT_PASSWORD
+              value: test
+            - name: MYSQL_DATABASE
+              value: subject
+            - name: MYSQL_USER
+              value: test
+            - name: MYSQL_PASSWORD
+              value: test
+          ports:
+            - containerPort: 3306
+              name: mysql
+          volumeMounts:
+            - name: mysql-persistent-storage
+              mountPath: /var/lib/mysql
+      volumes:
+        - name: mysql-persistent-storage
+          persistentVolumeClaim:
+            claimName: mysql-pv-claim

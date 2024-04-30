@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
+import java.time.LocalDate;
+
 @MappedSuperclass
 @SuperBuilder
 @Getter
@@ -19,5 +21,8 @@ public abstract class HumanSubject  extends Subject{
 
     @Column
     private String surname;
+
+    @Column
+    private LocalDate birthdate;
 
 }

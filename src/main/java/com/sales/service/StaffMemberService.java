@@ -4,6 +4,7 @@ import com.sales.model.StaffMember;
 import com.sales.repository.StaffMemberRepository;
 import com.sales.service.dto.StaffMemberDto;
 import com.sales.service.dto.StaffMemberNoIdDto;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,17 +22,20 @@ public class StaffMemberService {
         this.staffMemberRepository = staffMemberRepository;
     }
 
+    @Transactional
     public Optional<StaffMemberDto> getStaffMemberById(UUID id) {
         return staffMemberRepository.findById(id)
                 .map(this::convertToDto);
     }
 
+    @Transactional
     public StaffMemberDto createStaffMember(StaffMemberNoIdDto staffMemberDto) {
         StaffMember staffMember = convertToEntity(staffMemberDto);
         StaffMember createdStaffMember = staffMemberRepository.save(staffMember);
         return convertToDto(createdStaffMember);
     }
 
+    @Transactional
     public StaffMemberDto updateStaffMember(UUID id, StaffMemberNoIdDto staffMemberDto) {
         Optional<StaffMember> optionalStaffMember = staffMemberRepository.findById(id);
 
@@ -46,6 +50,7 @@ public class StaffMemberService {
         }
     }
 
+    @Transactional
     public void deleteStaffMember(UUID id) {
         staffMemberRepository.deleteById(id);
     }
