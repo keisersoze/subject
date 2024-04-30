@@ -18,6 +18,5 @@ public class Group extends Subject {
 
     @Column
     private String code;
-    
 
 }
